@@ -1,0 +1,6 @@
+Database*
+bin
+obj
+.vs
+packages
+Models.*

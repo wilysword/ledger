@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1755cd19c30b4e25b2dc496786da402e" Name="Diagram1" >
+        <EntityTypeShape EntityType="Models.Account" Width="1.5" PointX="3.875" PointY="5" />
+        <EntityTypeShape EntityType="Models.Category" Width="1.5" PointX="3.875" PointY="1.25" />
+        <EntityTypeShape EntityType="Models.Percentage" Width="1.5" PointX="1.25" PointY="3.125" />
+        <AssociationConnector Association="Models.PercentageAccount" />
+        <AssociationConnector Association="Models.CategoryPercentage" />
+        <EntityTypeShape EntityType="Models.Entry" Width="1.5" PointX="7" PointY="1.375" />
+        <AssociationConnector Association="Models.EntryCategory" />
+        <EntityTypeShape EntityType="Models.EntryAmount" Width="1.5" PointX="7" PointY="5" />
+        <AssociationConnector Association="Models.EntryAmountEntry" />
+        <AssociationConnector Association="Models.EntryAmountAccount" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

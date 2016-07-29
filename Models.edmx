@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Models.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ModelsStoreContainer">
+    <EntitySet Name="Accounts" EntityType="Models.Store.Accounts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Categories" EntityType="Models.Store.Categories" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Percentages" EntityType="Models.Store.Percentages" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Entries" EntityType="Models.Store.Entries" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="EntryAmounts" EntityType="Models.Store.EntryAmounts" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="PercentageAccount" Association="Models.Store.PercentageAccount">
+      <End Role="Percentage" EntitySet="Percentages" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="CategoryPercentage" Association="Models.Store.CategoryPercentage">
+      <End Role="Percentage" EntitySet="Percentages" />
+      <End Role="Category" EntitySet="Categories" />
+    </AssociationSet>
+    <AssociationSet Name="EntryCategory" Association="Models.Store.EntryCategory">
+      <End Role="Entry" EntitySet="Entries" />
+      <End Role="Category" EntitySet="Categories" />
+    </AssociationSet>
+    <AssociationSet Name="EntryAmountEntry" Association="Models.Store.EntryAmountEntry">
+      <End Role="EntryAmount" EntitySet="EntryAmounts" />
+      <End Role="Entry" EntitySet="Entries" />
+    </AssociationSet>
+    <AssociationSet Name="EntryAmountAccount" Association="Models.Store.EntryAmountAccount">
+      <End Role="EntryAmount" EntitySet="EntryAmounts" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Accounts">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" Nullable="false" MaxLength="64" />
+    <Property Name="Position" Type="tinyint" Nullable="false" />
+    <Property Name="IsVirtual" Type="bit" Nullable="false" DefaultValue="false" />
+    <Property Name="StartDate" Type="datetime" Nullable="true" />
+    <Property Name="EndDate" Type="datetime" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" Nullable="false" MaxLength="64" />
+    <Property Name="Position" Type="tinyint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Percentages">
+    <Key>
+      <PropertyRef Name="AccountID" />
+      <PropertyRef Name="CategoryID" />
+    </Key>
+    <Property Name="AccountID" Type="int" Nullable="false" />
+    <Property Name="CategoryID" Type="int" Nullable="false" />
+    <Property Name="Percent" Type="decimal" Nullable="false" Precision="5" Scale="2" />
+  </EntityType>
+  <EntityType Name="Entries">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CategoryID" Type="int" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Total" Type="decimal" Nullable="false" Scale="2" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Check" Type="bit" Nullable="false" DefaultValue="false" />
+  </EntityType>
+  <EntityType Name="EntryAmounts">
+    <Key>
+      <PropertyRef Name="EntryID" />
+      <PropertyRef Name="AccountID" />
+    </Key>
+    <Property Name="EntryID" Type="int" Nullable="false" />
+    <Property Name="AccountID" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="decimal" Nullable="false" Scale="2" />
+  </EntityType>
+  <Association Name="PercentageAccount">
+    <End Role="Percentage" Type="Models.Store.Percentages" Multiplicity="*" />
+    <End Role="Account" Type="Models.Store.Accounts" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Percentage">
+        <PropertyRef Name="AccountID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CategoryPercentage">
+    <End Role="Percentage" Type="Models.Store.Percentages" Multiplicity="*" />
+    <End Role="Category" Type="Models.Store.Categories" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Percentage">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EntryCategory">
+    <End Role="Entry" Type="Models.Store.Entries" Multiplicity="*" />
+    <End Role="Category" Type="Models.Store.Categories" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Entry">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EntryAmountEntry">
+    <End Role="EntryAmount" Type="Models.Store.EntryAmounts" Multiplicity="*" />
+    <End Role="Entry" Type="Models.Store.Entries" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Entry">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="EntryAmount">
+        <PropertyRef Name="EntryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EntryAmountAccount">
+    <End Role="EntryAmount" Type="Models.Store.EntryAmounts" Multiplicity="*" />
+    <End Role="Account" Type="Models.Store.Accounts" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="EntryAmount">
+        <PropertyRef Name="AccountID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Models" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ModelsContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Models.Account" />
+          <EntitySet Name="Categories" EntityType="Models.Category" />
+          <EntitySet Name="Percentages" EntityType="Models.Percentage" />
+          <AssociationSet Name="PercentageAccount" Association="Models.PercentageAccount">
+            <End Role="Percentage" EntitySet="Percentages" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="CategoryPercentage" Association="Models.CategoryPercentage">
+            <End Role="Percentage" EntitySet="Percentages" />
+            <End Role="Category" EntitySet="Categories" />
+          </AssociationSet>
+          <EntitySet Name="Entries" EntityType="Models.Entry" />
+          <AssociationSet Name="EntryCategory" Association="Models.EntryCategory">
+            <End Role="Entry" EntitySet="Entries" />
+            <End Role="Category" EntitySet="Categories" />
+          </AssociationSet>
+          <EntitySet Name="EntryAmounts" EntityType="Models.EntryAmount" />
+          <AssociationSet Name="EntryAmountEntry" Association="Models.EntryAmountEntry">
+            <End Role="EntryAmount" EntitySet="EntryAmounts" />
+            <End Role="Entry" EntitySet="Entries" />
+          </AssociationSet>
+          <AssociationSet Name="EntryAmountAccount" Association="Models.EntryAmountAccount">
+            <End Role="EntryAmount" EntitySet="EntryAmounts" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" Unicode="false" MaxLength="64" />
+          <Property Name="Position" Type="Byte" Nullable="false" />
+          <Property Name="IsVirtual" Type="Boolean" Nullable="false" DefaultValue="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="true" />
+          <Property Name="EndDate" Type="DateTime" Nullable="true" />
+          <NavigationProperty Name="Amounts" Relationship="Models.EntryAmountAccount" FromRole="Account" ToRole="EntryAmount" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="64" Unicode="false" />
+          <Property Name="Position" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Percentages" Relationship="Models.CategoryPercentage" FromRole="Category" ToRole="Percentage" />
+          <NavigationProperty Name="Entries" Relationship="Models.EntryCategory" FromRole="Category" ToRole="Entry" />
+        </EntityType>
+        <EntityType Name="Percentage">
+          <Key>
+            <PropertyRef Name="AccountID" />
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <NavigationProperty Name="Account" Relationship="Models.PercentageAccount" FromRole="Percentage" ToRole="Account" />
+          <Property Name="AccountID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="Models.CategoryPercentage" FromRole="Percentage" ToRole="Category" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="Percent" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+        </EntityType>
+        <Association Name="PercentageAccount">
+          <End Type="Models.Percentage" Role="Percentage" Multiplicity="*" />
+          <End Type="Models.Account" Role="Account" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Percentage">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CategoryPercentage">
+          <End Type="Models.Percentage" Role="Percentage" Multiplicity="*" />
+          <End Type="Models.Category" Role="Category" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Percentage">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Entry">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Category" Relationship="Models.EntryCategory" FromRole="Entry" ToRole="Category" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Total" Type="Decimal" Nullable="false" Scale="2" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Check" Type="Boolean" Nullable="false" DefaultValue="false" />
+          <NavigationProperty Name="Amounts" Relationship="Models.EntryAmountEntry" FromRole="Entry" ToRole="EntryAmount" />
+        </EntityType>
+        <Association Name="EntryCategory">
+          <End Type="Models.Entry" Role="Entry" Multiplicity="*" />
+          <End Type="Models.Category" Role="Category" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Entry">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="EntryAmount">
+          <Key>
+            <PropertyRef Name="EntryID" />
+            <PropertyRef Name="AccountID" />
+          </Key>
+          <NavigationProperty Name="Entry" Relationship="Models.EntryAmountEntry" FromRole="EntryAmount" ToRole="Entry" />
+          <Property Name="EntryID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Models.EntryAmountAccount" FromRole="EntryAmount" ToRole="Account" />
+          <Property Name="AccountID" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Scale="2" />
+        </EntityType>
+        <Association Name="EntryAmountEntry">
+          <End Type="Models.EntryAmount" Role="EntryAmount" Multiplicity="*" />
+          <End Type="Models.Entry" Role="Entry" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Entry">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EntryAmount">
+              <PropertyRef Name="EntryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EntryAmountAccount">
+          <End Type="Models.EntryAmount" Role="EntryAmount" Multiplicity="*" />
+          <End Type="Models.Account" Role="Account" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EntryAmount">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="ModelsContainer">
+    <EntitySetMapping Name="Accounts">
+      <EntityTypeMapping TypeName="IsTypeOf(Models.Account)">
+        <MappingFragment StoreEntitySet="Accounts">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="IsVirtual" ColumnName="IsVirtual" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="IsTypeOf(Models.Category)">
+        <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Percentages">
+      <EntityTypeMapping TypeName="IsTypeOf(Models.Percentage)">
+        <MappingFragment StoreEntitySet="Percentages">
+          <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+          <ScalarProperty Name="Percent" ColumnName="Percent" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Entries">
+      <EntityTypeMapping TypeName="IsTypeOf(Models.Entry)">
+        <MappingFragment StoreEntitySet="Entries">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Check" ColumnName="Check" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EntryAmounts">
+      <EntityTypeMapping TypeName="IsTypeOf(Models.EntryAmount)">
+        <MappingFragment StoreEntitySet="EntryAmounts">
+          <ScalarProperty Name="EntryID" ColumnName="EntryID" />
+          <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
