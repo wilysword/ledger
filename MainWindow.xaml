@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="Budget" Height="350" Width="525" SizeChanged="Window_SizeChanged">
     <Grid>
-        <TabControl x:Name="tabControl" HorizontalAlignment="Left" VerticalAlignment="Top" Height="319" Width="517">
+        <TabControl x:Name="tabControl" HorizontalAlignment="Left" VerticalAlignment="Top">
             <TabItem Header="Ledger">
-                <Grid Background="#FFE5E5E5"/>
+                <local:LedgerControl/>
             </TabItem>
             <TabItem Header="Categories">
                 <Grid Background="#FFE5E5E5"/>

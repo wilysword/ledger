@@ -22,13 +22,19 @@ namespace Budget
     {
         public MainWindow()
         {
+            if (App.DB.Categories.Count() == 0)
+            {
+                App.DB.Categories.Add(new Budget.Category() { Name = "Tithing", Position = 10 });
+                App.DB.Categories.Add(new Budget.Category() { Name = "Entertainment", Position = 1 });
+                App.DB.SaveChanges();
+            }
             InitializeComponent();
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            tabControl.Width = e.NewSize.Width - 16;
-            tabControl.Height = e.NewSize.Height - 39;
+            //tabControl.Width = e.NewSize.Width - 16;
+            //tabControl.Height = e.NewSize.Height - 39;
         }
     }
 }
