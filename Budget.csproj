@@ -83,6 +83,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="EntryAmountControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EntryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -111,6 +115,9 @@
     </Compile>
     <Compile Include="EntryAmount.cs">
       <DependentUpon>Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntryAmountControl.xaml.cs">
+      <DependentUpon>EntryAmountControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="EntryControl.xaml.cs">
       <DependentUpon>EntryControl.xaml</DependentUpon>

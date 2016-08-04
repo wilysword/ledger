@@ -16,14 +16,13 @@
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>
-                <GridViewColumn Width="200" Header="Balance">
+                <GridViewColumn Header="Balance">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock>Partner</TextBlock>
+                            <local:EntryAmountControl/>
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>
-                <GridViewColumn Width="200" Header="300"/>
             </GridView>
         </ListView.View>
     </ListView>

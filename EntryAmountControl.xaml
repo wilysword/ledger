@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Budget.EntryAmountControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Budget"
+             Height="48" Width="80">
+    <UserControl.Resources>
+        <local:CurrencyConverter x:Key="currencyConverter"/>
+        <local:CurrencyColorer x:Key="currencyColorer"/>
+    </UserControl.Resources>
+    <Grid>
+        <TextBox x:Name="amount" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="80" TextAlignment="Right" SourceUpdated="updateSum"
+                 Foreground="{Binding Amount, Converter={StaticResource currencyColorer}, Mode=OneWay}" GotFocus="amount_GotFocus" LostFocus="amount_LostFocus">
+            <TextBox.Text>
+                <Binding Path="Amount" Converter="{StaticResource currencyConverter}" NotifyOnSourceUpdated="True">
+                    <Binding.ValidationRules>
+                        <local:CurrencyValidator AllowBlank="False"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBlock x:Name="sum"  HorizontalAlignment="Left" Margin="0,24,0,0" VerticalAlignment="Top" Width="80" Height="24"
+                   Text="{Binding Sum, Converter={StaticResource currencyConverter}, ConverterParameter=true, Mode=OneWay}"
+                   Foreground="{Binding Sum, Converter={StaticResource currencyColorer}, Mode=OneWay}" TextAlignment="Center"/>
+    </Grid>
+</UserControl>
