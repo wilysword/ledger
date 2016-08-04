@@ -19,7 +19,7 @@
                 <GridViewColumn Header="Balance">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
-                            <local:EntryAmountControl/>
+                            <local:EntryAmountControl DataContext="{Binding Balance}"/>
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>

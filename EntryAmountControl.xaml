@@ -8,18 +8,9 @@
         <local:CurrencyColorer x:Key="currencyColorer"/>
     </UserControl.Resources>
     <Grid>
-        <TextBox x:Name="amount" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="80" TextAlignment="Right" SourceUpdated="updateSum"
-                 Foreground="{Binding Amount, Converter={StaticResource currencyColorer}, Mode=OneWay}" GotFocus="amount_GotFocus" LostFocus="amount_LostFocus">
-            <TextBox.Text>
-                <Binding Path="Amount" Converter="{StaticResource currencyConverter}" NotifyOnSourceUpdated="True">
-                    <Binding.ValidationRules>
-                        <local:CurrencyValidator AllowBlank="False"/>
-                    </Binding.ValidationRules>
-                </Binding>
-            </TextBox.Text>
-        </TextBox>
+        <local:CurrencyBox x:Name="amount" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="80" BindingPath="BoundAmount" LostFocus="amount_LostFocus"/>
         <TextBlock x:Name="sum"  HorizontalAlignment="Left" Margin="0,24,0,0" VerticalAlignment="Top" Width="80" Height="24"
-                   Text="{Binding Sum, Converter={StaticResource currencyConverter}, ConverterParameter=true, Mode=OneWay}"
+                   Text="{Binding Sum, Converter={StaticResource currencyConverter}, ConverterParameter=showZero, Mode=OneWay}"
                    Foreground="{Binding Sum, Converter={StaticResource currencyColorer}, Mode=OneWay}" TextAlignment="Center"/>
     </Grid>
 </UserControl>

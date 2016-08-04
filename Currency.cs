@@ -10,7 +10,7 @@ namespace Budget
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var val = (decimal)value;
-            if (val == default(decimal) && !"true".Equals(parameter as string))
+            if (val == default(decimal) && !"showZero".Equals(parameter as string))
                 return "";
             return val.ToString("C", culture);
         }

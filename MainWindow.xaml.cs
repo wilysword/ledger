@@ -23,18 +23,37 @@ namespace Budget
         public MainWindow()
         {
             if (App.DB.Categories.Count() == 0)
-            {
-                App.DB.Categories.Add(new Budget.Category() { Name = "Tithing", Position = 10 });
-                App.DB.Categories.Add(new Budget.Category() { Name = "Entertainment", Position = 1 });
-                App.DB.SaveChanges();
-            }
+                setupTestData();
             InitializeComponent();
         }
 
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void setupTestData()
         {
-            //tabControl.Width = e.NewSize.Width - 16;
-            //tabControl.Height = e.NewSize.Height - 39;
+            var acc1 = new Account() { Name = "Spending", Position = 2, IsVirtual = true };
+            var acc2 = new Account() { Name = "Tithing", Position = 1, IsVirtual = true };
+            var acc3 = new Account() { Name = "Checking", Position = 4 };
+            var cat1 = new Category() { Name = "Tithing", Position = 10 };
+            var entry1 = new Entry() { Check = true, Date = new DateTime(2016, 7, 31), Description = "Tithes & Offerings", Total = -70 };
+            entry1.Amounts.Add(new EntryAmount() { Account = acc2, Amount = -70 });
+            entry1.Amounts.Add(new EntryAmount() { Account = acc3, Amount = -100 });
+            cat1.Entries.Add(entry1);
+            cat1.Percentages.Add(new Percentage() { Account = acc2, Percent = 100 });
+            var cat2 = new Category() { Name = "Entertainment", Position = 1 };
+            cat2.Percentages.Add(new Percentage() { Account = acc1, Percent = 100 });
+            cat2.Percentages.Add(new Percentage() { Account = acc3, Percent = 100 });
+            var entry2 = new Entry() { Date = new DateTime(2016, 8, 2), Description = "Mission Impossible", Total = -24.5M };
+            entry2.Amounts.Add(new EntryAmount() { Account = acc1, Amount = -24.5M });
+            entry2.Amounts.Add(new EntryAmount() { Account = acc3, Amount = -24.5M });
+            cat2.Entries.Add(entry2);
+            var entry3 = new Entry() { Date = new DateTime(2016, 7, 2), Description = "Netflix", Total = -8.46M };
+            entry3.Amounts.Add(new EntryAmount() { Account = acc3, Amount = -8.46M });
+            cat2.Entries.Add(entry3);
+            var entry4 = new Entry() { Date = new DateTime(2016, 4, 2), Description = "Initial", Total = 100 };
+            entry4.Amounts.Add(new EntryAmount() { Account = acc3, Amount = 100 });
+            cat2.Entries.Add(entry4);
+            App.DB.Categories.Add(cat1);
+            App.DB.Categories.Add(cat2);
+            App.DB.SaveChanges();
         }
     }
 }

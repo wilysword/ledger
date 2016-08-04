@@ -35,10 +35,5 @@ namespace Budget
             InitializeComponent();
             category.ItemsSource = App.DB.Categories.OrderBy(x => x.Position).ToArray();
         }
-
-        private void total_GotFocus(object sender, RoutedEventArgs e)
-        {
-            total.SelectAll();
-        }
     }
 }

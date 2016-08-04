@@ -1,36 +1,16 @@
 ﻿<UserControl x:Class="Budget.EntryControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Budget"
-             mc:Ignorable="d" 
              Height="48" Width="307">
     <UserControl.Resources>
         <local:NullDateTimeConverter x:Key="dtConverter"/>
-        <local:CurrencyConverter x:Key="currencyConverter"/>
-        <local:CurrencyColorer x:Key="currencyColorer"/>
     </UserControl.Resources>
     <Grid>
         <DatePicker x:Name="date" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedDate="{Binding Date, Converter={StaticResource dtConverter}}"/>
-        <TextBox x:Name="total" HorizontalAlignment="Left" Height="24" Margin="107,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75"
-                 Foreground="{Binding Total, Converter={StaticResource currencyColorer}, Mode=OneWay}"
-                 GotFocus="total_GotFocus">
-            <TextBox.Text>
-                <Binding Path="Total" Converter="{StaticResource currencyConverter}">
-                    <Binding.ValidationRules>
-                        <local:CurrencyValidator AllowBlank="False"/>
-                    </Binding.ValidationRules>
-                </Binding>
-            </TextBox.Text>
-        </TextBox>
-        <ComboBox x:Name="category" HorizontalAlignment="Left" Margin="187,0,0,0" VerticalAlignment="Top" Height="24" Width="120" SelectedItem="{Binding Category}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+        <local:CurrencyBox x:Name="total" HorizontalAlignment="Left" Height="24" Margin="107,0,0,0" VerticalAlignment="Top" Width="75" BindingPath="Total"/>
+        <ComboBox x:Name="category" HorizontalAlignment="Left" Margin="187,0,0,0" VerticalAlignment="Top" Height="24" Width="120"
+                  SelectedItem="{Binding Category}" DisplayMemberPath="Name"/>
         <TextBox x:Name="description" HorizontalAlignment="Left" Margin="0,28,0,0" VerticalAlignment="Top" Width="287" Height="20" Text="{Binding Description}"/>
         <CheckBox x:Name="verifyCheck" HorizontalAlignment="Left" Margin="292,30,0,0" VerticalAlignment="Top" IsChecked="{Binding Check}"/>
     </Grid>
