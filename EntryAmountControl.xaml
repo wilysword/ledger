@@ -6,10 +6,12 @@
     <UserControl.Resources>
         <local:CurrencyConverter x:Key="currencyConverter"/>
         <local:CurrencyColorer x:Key="currencyColorer"/>
+        <local:AmountEnabledConverter x:Key="enabled"/>
     </UserControl.Resources>
     <Grid>
-        <local:CurrencyBox x:Name="amount" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="80" BindingPath="BoundAmount" LostFocus="amount_LostFocus"/>
-        <TextBlock x:Name="sum"  HorizontalAlignment="Left" Margin="0,24,0,0" VerticalAlignment="Top" Width="80" Height="24"
+        <local:CurrencyBox HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="80" BindingPath="BoundAmount"
+                           IsEnabled="{Binding Converter={StaticResource enabled}, Mode=OneTime}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="0,24,0,0" VerticalAlignment="Top" Width="80" Height="24"
                    Text="{Binding Sum, Converter={StaticResource currencyConverter}, ConverterParameter=showZero, Mode=OneWay}"
                    Foreground="{Binding Sum, Converter={StaticResource currencyColorer}, Mode=OneWay}" TextAlignment="Center"/>
     </Grid>

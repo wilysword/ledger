@@ -6,7 +6,16 @@
              xmlns:local="clr-namespace:Budget"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <ListView x:Name="ledger">
+    <ListView x:Name="ledger" KeyUp="ledger_KeyUp">
+        <ListView.Resources>
+            <Style TargetType="ListViewItem">
+                <Style.Triggers>
+                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                        <Setter Property="IsSelected" Value="True" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ListView.Resources>
         <ListView.View>
             <GridView x:Name="grid">
                 <GridViewColumn Header="Entries">

@@ -3,11 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Budget"
              Height="48" Width="307">
-    <UserControl.Resources>
-        <local:NullDateTimeConverter x:Key="dtConverter"/>
-    </UserControl.Resources>
     <Grid>
-        <DatePicker x:Name="date" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedDate="{Binding Date, Converter={StaticResource dtConverter}}"/>
+        <DatePicker x:Name="date" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedDate="{Binding BoundDate}"/>
         <local:CurrencyBox x:Name="total" HorizontalAlignment="Left" Height="24" Margin="107,0,0,0" VerticalAlignment="Top" Width="75" BindingPath="Total"/>
         <ComboBox x:Name="category" HorizontalAlignment="Left" Margin="187,0,0,0" VerticalAlignment="Top" Height="24" Width="120"
                   SelectedItem="{Binding Category}" DisplayMemberPath="Name"/>

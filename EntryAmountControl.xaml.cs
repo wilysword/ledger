@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -47,8 +45,13 @@ namespace Budget
 
         public void Connect(EntryAmount previous)
         {
-            sum = previous.Sum;
+            Sum = previous.Sum;
             previous.PropertyChanged += propagateSum;
+        }
+
+        public void Disconnect(EntryAmount previous)
+        {
+            previous.PropertyChanged -= propagateSum;
         }
 
         private void propagateSum(object sender, PropertyChangedEventArgs e)
@@ -59,10 +62,8 @@ namespace Budget
         public event PropertyChangedEventHandler PropertyChanged;
     }
 
-    public class EntryAmountCollection : Dictionary<Account, EntryAmount>, INotifyCollectionChanged
+    public class EntryAmountCollection : Dictionary<Account, EntryAmount>
     {
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
         public readonly Entry Owner;
 
         public EntryAmountCollection(Entry owner, Account[] accounts) :
@@ -73,31 +74,34 @@ namespace Budget
             {
                 if (!ContainsKey(account))
                     Add(account, new EntryAmount() { Entry = owner, Account = account });
+                this[account].PropertyChanged += syncToOwner;
             }
         }
-    }
 
-    public partial class Entry
-    {
-        public BalanceAmount Balance { get; private set; }
-
-        public EntryAmountCollection BoundAmounts { get; private set; }
-
-        public void Setup(Account[] accounts, Entry previousEntry)
+        public void Connect(Entry previous)
         {
-            Balance = new BalanceAmount() { BoundAmount = 10, Sum = -5 };
-            BoundAmounts = new EntryAmountCollection(this, accounts);
-            if (previousEntry != null)
-                foreach (var account in accounts)
-                    BoundAmounts[account].Connect(previousEntry.BoundAmounts[account]);
+            foreach (var amount in Values)
+                amount.Connect(previous.BoundAmounts[amount.Account]);
         }
-    }
 
-    public class BalanceAmount
-    {
-        public readonly Account Account = new Account() { Name = "Balance", IsVirtual = true };
-        public decimal BoundAmount { get; set; }
-        public decimal Sum { get; set; }
+        public void Disconnect(Entry previous)
+        {
+            foreach (var amount in Values)
+                amount.Disconnect(previous.BoundAmounts[amount.Account]);
+        }
+
+        private void syncToOwner(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "BoundAmount")
+            {
+                EntryAmount amount = sender as EntryAmount;
+                bool isOwned = Owner.Amounts.Contains(amount);
+                if (amount.Amount == 0 && isOwned)
+                    Owner.Amounts.Remove(amount);
+                else if (amount.Amount != 0 && !isOwned)
+                    Owner.Amounts.Add(amount);
+            }
+        }
     }
 
     public class AmountConverter : IValueConverter
@@ -114,10 +118,17 @@ namespace Budget
             return amounts[account];
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) { throw new NotImplementedException(); }
+    }
+
+    public class AmountEnabledConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return value is EntryAmount;
         }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) { throw new NotImplementedException(); }
     }
 
     /// <summary>
@@ -128,11 +139,6 @@ namespace Budget
         public EntryAmountControl()
         {
             InitializeComponent();
-        }
-
-        private void amount_LostFocus(object sender, RoutedEventArgs e)
-        {
-            // Here we need to tell the EntryAmountCollection to fix itself.
         }
     }
 }

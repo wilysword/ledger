@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -7,22 +8,48 @@ using System.Windows.Data;
 
 namespace Budget
 {
-    internal class NullDateTimeConverter : IValueConverter
+    public partial class Entry : INotifyPropertyChanged
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public BalanceAmount Balance { get; private set; }
+
+        public EntryAmountCollection BoundAmounts { get; private set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void Setup(Account[] accounts, Entry previousEntry)
         {
-            var dt = (DateTime)value;
-            if (dt == default(DateTime))
-                return null;
-            return dt;
+            Balance = new BalanceAmount() { BoundAmount = 10, Sum = -5 };
+            BoundAmounts = new EntryAmountCollection(this, accounts);
+            if (previousEntry != null)
+                BoundAmounts.Connect(previousEntry);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public DateTime? BoundDate
         {
-            if (value == null)
-                return default(DateTime);
-            return value;
+            get
+            {
+                if (Date == default(DateTime))
+                    return null;
+                return Date;
+            }
+            set
+            {
+                if (!value.HasValue)
+                    value = default(DateTime);
+                if (value != Date)
+                {
+                    Date = value.Value;
+                    // Using "Date" instead of "BoundDate" because I don't want the data binding to loop unnecessarily.
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Date"));
+                }
+            }
         }
+    }
+
+    public class BalanceAmount
+    {
+        public decimal BoundAmount { get; set; }
+        public decimal Sum { get; set; }
     }
 
     /// <summary>

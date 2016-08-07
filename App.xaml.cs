@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace Budget
 {
@@ -7,6 +8,17 @@ namespace Budget
     /// </summary>
     public partial class App : Application
     {
-        internal static readonly ModelsContainer DB = new ModelsContainer();
+        internal static ModelsContainer DB { get; private set; }
+
+        static App()
+        {
+            DB = new ModelsContainer();
+        }
+
+        internal static void RefreshDB()
+        {
+            DB.SaveChanges();
+            DB = new ModelsContainer();
+        }
     }
 }

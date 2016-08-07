@@ -55,5 +55,11 @@ namespace Budget
             App.DB.Categories.Add(cat2);
             App.DB.SaveChanges();
         }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.S && Keyboard.Modifiers == ModifierKeys.Control)
+                App.DB.SaveChanges();
+        }
     }
 }
